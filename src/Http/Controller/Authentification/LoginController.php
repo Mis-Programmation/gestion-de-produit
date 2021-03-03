@@ -7,6 +7,7 @@ use MIS\Http\Controller\BaseController;
 use MIS\Infrastructure\Authentification\AuthManager;
 use MIS\Infrastructure\Repository\UserRepository;
 use MIS\Infrastructure\Service\Session;
+use MIS\Infrastructure\Service\SessionAuth;
 
 /**
  * permet de s'inscrire
@@ -33,12 +34,14 @@ class LoginController extends BaseController
         if($this->isRequest()){
             $result = $this->authManager->login($_POST['User']['email'],$_POST['User']['password']);
             if($result){
+
                 $this->addFlashe('success',"Bienvenu");
             }else{
                 $this->addFlashe('danger',"Erreur d'email ou de mot de passe .");
             }
 
             $this->redirect("/admin/product/list");
+
         }
 
        $this->render("Authentication/login");

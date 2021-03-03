@@ -6,7 +6,6 @@ namespace MIS\Http\Controller;
 
 use MIS\Infrastructure\Service\Session;
 use MIS\Infrastructure\Service\SessionAuth;
-use Slim\Flash\Messages;
 
 /**
  * Class BaseController
@@ -37,6 +36,7 @@ abstract class BaseController
 
     protected function isAuth()
     {
+
 
         if(!SessionAuth::get('AUTH') &&  $_SERVER['REQUEST_URI'] !== "/login" ){
             $this->redirect('/login');

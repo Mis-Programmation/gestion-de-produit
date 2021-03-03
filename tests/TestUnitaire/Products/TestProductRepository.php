@@ -30,10 +30,11 @@ class TestProductRepository extends TestCase
     public function testAddAndDeleteProductOnSuccess()
     {
         $product = new ProductEntity;
+
         $product
-            ->setRef($this->strRandom())
-            ->setName($this->strRandom())
-            ->setStock(mt_rand(100,1000));
+            ->setRef($this->strRandom());
+            $product->setName($this->strRandom());
+           $product->setStock(mt_rand(100,1000));
 
         // ajouter le produit dans la base de donnee
         self::getRepository()->persist($product);
