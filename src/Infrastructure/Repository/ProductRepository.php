@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace MIS\Infrastructure\Repository;
 
+use Doctrine\ORM\EntityRepository;
 use MIS\Domain\Product\Entity\ProductEntity;
 use MIS\Domain\Product\Repository\ProductRepositoryInterface;
+use MIS\EntityOrm\ProductEntityORM;
+use MIS\EntityOrm\UserEntityORM;
 
 /**
  * Class ProductRepository
@@ -14,57 +17,86 @@ use MIS\Domain\Product\Repository\ProductRepositoryInterface;
 class ProductRepository extends BaseRepository implements ProductRepositoryInterface
 {
 
-    protected string $table = "product";
-    protected string $entity = ProductEntity::class;
-
     public function __construct()
     {
-        parent::__construct();
+        parent::__construct(ProductEntityORM::class);
     }
+
 
     public function findByRef(string $ref): ?ProductEntity
     {
         /** @var ProductEntity $product */
         $product = $this->_findBy('ref',$ref);
-        return $product;
+
+        return self::hydrate($product);
     }
+
 
     public function persist(ProductEntity $entity): void
     {
-        if(!$entity->getId()){
-                $sql = "INSERT INTO product SET ref = ? , name = ?, stock = ?";
-            $param = [$entity->getRef(),$entity->getName(),$entity->getStock()];
-        }else{
-                $sql = "UPDATE product SET ref = ? , name = ?, stock = ? WHERE id = ?";
-            $param = [$entity->getRef(),$entity->getName(),$entity->getStock(),$entity->getId()];
-        }
-        $stm =  $this->connexion->prepare($sql);
+        if($entity->getId() !== null){
+            /** @var  ProductEntityORM $product */
+            $product = $this->repository->findOneBy(['id' => $entity->getId()]);
+            $product->setName($entity->getName());
+            $product->setRef($entity->getRef());
+            $product->setStock($entity->getStock());
 
-        $stm->execute($param);
+            parent::_persist($product);
+            return;
+        }
+
+      parent::_persist(self::reverseHydrate($entity));
+    }
+
+    public static function reverseHydrate(ProductEntity $entity)
+    {
+        $product =  new ProductEntityORM();
+        $product->setStock($entity->getStock());
+        $product->setRef($entity->getRef());
+        $product->setName($entity->getName());
+        $product->setId($entity->getId());
+
+        return $product;
     }
 
     public function remove(int $id): bool
     {
-        return $this->_remove($id);
+
+        $product = $this->_findBy("id",$id);
+
+      return $this->_remove($product);
     }
 
     public function findAll(): ?array
     {
-        return $this->_findAll();
+        return parent::_findAll();
+    }
+
+    public static function hydrate($entity):ProductEntity
+    {
+        $product = new ProductEntity;
+        $product->setName($entity->getName());
+        $product->setRef($entity->getRef());
+        $product->setStock($entity->getStock());
+        $product->setId($entity->getId());
+
+        return $product;
     }
 
     public function search(string $query): ?array
     {
-        $stm =  $this->connexion->prepare('SELECT * FROM product WHERE ref LIKE :ref');
-        $stm->execute([':ref' => '%' . $query . '%']);
-        return $stm->fetchAll(\PDO::FETCH_CLASS,$this->entity);
+//        $stm =  $this->connexion->prepare('SELECT * FROM product WHERE ref LIKE :ref');
+//        $stm->execute([':ref' => '%' . $query . '%']);
+//        return $stm->fetchAll(\PDO::FETCH_CLASS,$this->entity);
+
+        return [];
     }
 
     public function findById(int $id): ?ProductEntity
     {
         /** @var ProductEntity $product */
-       $product = $this->_findBy('id',$id);
+       $product = $this->_findBy("id",$id);
 
-        return  $product;
+        return  self::hydrate($product);
     }
 }

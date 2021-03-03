@@ -8,7 +8,6 @@ use MIS\Domain\User\Entity\UserEntity;
 
 interface UserRepositoryInterface
 {
-    public function __construct();
 
     /**
      * @param int $id

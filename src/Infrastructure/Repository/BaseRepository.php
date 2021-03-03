@@ -3,51 +3,59 @@
 
 namespace MIS\Infrastructure\Repository;
 
-use MIS\Infrastructure\Database\Database;
-
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use MIS\EntityOrm\ProductEntityORM;
 abstract class BaseRepository
 {
-    protected \PDO $connexion;
-    protected string $table;
-    protected string $entity;
+    protected $_em;
+    protected $repository;
 
-    public function __construct()
+    public function __construct( string $repository)
     {
-        $this->connexion = Database::getInstance();
-    }
-
-    public function _findBy(string $key,$value):?object
-    {
-        $stm = $this->connexion->prepare("SELECT * FROM {$this->table} as t WHERE  t.$key = ?");
-        $stm->execute([$value]);
-
-        $stm->setFetchMode(\PDO::FETCH_CLASS,$this->entity);
-
-        $result = $stm->fetch();
-
-        if($result === false) return null;
-
-        return $result;
+       $this->_em = entityManager();
+       $this->repository = entityManager()->getRepository($repository);
 
     }
 
-
-    public function _remove($id):bool
+    public function _findBy(string $key,$value)
     {
-        $stm = $this->connexion->prepare(" DELETE FROM {$this->table} WHERE id = ? ");
-        return $stm->execute([$id]);
+       return $this->repository->findOneBy([$key => $value]);
+    }
+
+    public function _remove(object $o):bool
+    {
+        try {
+            $this->_em->remove($o);
+            $this->_em->flush();
+            return true;
+        } catch (OptimisticLockException | ORMException $e) {
+            return false;
+        }
+    }
+
+    /**
+     * @param object $o
+     * @throws ORMException
+     */
+    public function _persist(object $o)
+    {
+        try {
+
+            if($o->getId() === null){
+                $this->_em->persist($o);
+            }
+            $this->_em->flush();
+        } catch (ORMException | OptimisticLockException $e) {
+
+            throw $e;
+        }
+
     }
 
     public function _findAll():?array
     {
-        $stm = $this->connexion->prepare(" SELECT * FROM {$this->table} LIMIT 100");
-        $stm->execute();
-
-        $result = $stm->fetchAll(\PDO::FETCH_CLASS,$this->entity);
-
-        if($result === false) return null;
-
-        return $result;
+        return $this->repository->findAll();
     }
 
 }

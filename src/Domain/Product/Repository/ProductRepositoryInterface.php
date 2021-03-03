@@ -14,7 +14,7 @@ use MIS\Domain\Product\Entity\ProductEntity;
  */
 interface ProductRepositoryInterface
 {
-    public function __construct();
+
 
     /**
      * @param string $ref

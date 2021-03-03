@@ -4,12 +4,13 @@
 namespace MIS\Http\Controller\Product;
 
 
+use MIS\Domain\Product\Repository\ProductRepositoryInterface;
 use MIS\Http\Controller\BaseController;
 use MIS\Infrastructure\Repository\ProductRepository;
 
 class ListProductController extends BaseController
 {
-    private ProductRepository $repository;
+    private ProductRepositoryInterface $repository;
     public function __construct()
     {
         $this->repository = new ProductRepository();
@@ -20,6 +21,7 @@ class ListProductController extends BaseController
         $this->isAuth();
 
         $products =  $this->repository->findAll();
+
         $this->render("Product/listProduct",[
             'products' => $products
         ]);

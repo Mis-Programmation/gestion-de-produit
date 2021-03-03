@@ -7,5 +7,17 @@
       <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mariadb://localhost:3306</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="db.sqlite" uuid="57c717ba-e26c-41c3-b3c7-a44f27797fb7">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:C:\xampp\htdocs\gestionProduit\config\db.sqlite</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="gestionproduit@localhost" uuid="ae24e3aa-85c1-446a-a6cd-57e892713749">
+      <driver-ref>mariadb</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mariadb://localhost:3306/gestionproduit</jdbc-url>
+    </data-source>
   </component>
 </project>

@@ -5,19 +5,23 @@
         "symfony/var-dumper": "^5.2",
         "slim/flash": "^0.4.0",
       "ext-pdo": "*",
-      "ext-json": "*"
+      "ext-json": "*",
+        "doctrine/orm": "^2.8"
     },
     "license": "MIS",
     "authors": [
         {
             "name": "Mis-programmation",
-            "email": "julebreezy4@gmail.com"
+            "email": "mamadousoko98@gmail.com"
         }
     ],
     "autoload": {
         "psr-4": {
             "MIS\\" : "src/"
-        }
+        },
+        "files": [
+            "config/bootstrap.php"
+        ]
     },
     "require-dev": {
         "phpunit/phpunit": "7"

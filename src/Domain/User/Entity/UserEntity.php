@@ -11,11 +11,11 @@ namespace MIS\Domain\User\Entity;
  */
 class UserEntity
 {
-    private int $id;
+    private ?int $id = null;
 
-    private string $email;
+    private ?string $email = null;
 
-    private string $password;
+    private ?string $password = null;
 
     /**
      * UserEntity constructor.
@@ -32,10 +32,15 @@ class UserEntity
         return $user;
     }
 
+    public function setId(?int $id): void
+    {
+        $this->id = $id;
+    }
+
     /**
      * @return string
      */
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -43,14 +48,14 @@ class UserEntity
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
     /**
      * @param string $email
      */
-    public function setEmail(string $email): void
+    public function setEmail(?string $email): void
     {
         $this->email = $email;
     }
@@ -58,7 +63,7 @@ class UserEntity
     /**
      * @return string
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
@@ -66,7 +71,7 @@ class UserEntity
     /**
      * @param string $password
      */
-    public function setPassword(string $password): void
+    public function setPassword(?string $password): void
     {
         $this->password = $password;
     }

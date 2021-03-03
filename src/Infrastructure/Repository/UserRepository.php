@@ -2,51 +2,62 @@
 
 
 namespace MIS\Infrastructure\Repository;
+use Doctrine\ORM\EntityRepository;
 use MIS\Domain\User\Repository\UserRepositoryInterface;
 use MIS\Domain\User\Entity\UserEntity;
+use MIS\EntityOrm\UserEntityORM;
+
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
-    protected string $table = "user";
-    protected string $entity = UserEntity::class;
 
-   public function __construct()
-   {
-       parent::__construct();
-   }
+    public function __construct()
+    {
+        parent::__construct(UserEntityORM::class);
+    }
 
     public function findById(int $id): ?UserEntity
     {
         /** @var UserEntity $user */
-        $user = $this->_findBy("id",$id);
-        return $user;
+        $user = parent::_findBy('id',$id);
+
+        return self::hydrate($user);
+    }
+
+    public static function hydrate($user):UserEntity
+    {
+       $userEntity =  new UserEntity;
+
+       $userEntity->setPassword($user->getPassword());
+       $userEntity->setEmail($user->getEmail());
+       $userEntity->setId($user->getId());
+
+       return $userEntity;
     }
 
     public function findByEmail(string $email): ?UserEntity
     {
         /** @var UserEntity $user */
 
-        $user = $this->_findBy("email",$email);
+        $user = parent::_findBy("email",$email);
 
-        return $user;
+        return self::hydrate($user);
     }
 
     public function persist(UserEntity $userEntity): void
     {
-
-        $stm = $this->connexion->prepare("INSERT INTO user SET email = ?,password = ?");
-         $stm->execute([
-                 $userEntity->getEmail(), $userEntity->getPassword()
-         ]);
+        parent::_persist($userEntity);
     }
 
     public function findAll(): ?array
     {
-        return $this->_findAll();
+        return parent::_findAll();
     }
 
-    public function remove(int $id): void
+    public function remove(int $id):void
     {
-        $this->_remove($id);
+       $user =  $this->findById($id);
+
+        parent::_remove($user);
     }
 }

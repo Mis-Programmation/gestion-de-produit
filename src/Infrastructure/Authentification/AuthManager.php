@@ -29,9 +29,11 @@ final class AuthManager
         if(null === $user){
             return false;
         }
+
         if(password_verify($password,$user->getPassword()))
         {
             SessionAuth::add("AUTH",['id' => $user->getId()]);
+
             return true;
         }
         return false;

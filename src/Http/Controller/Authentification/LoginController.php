@@ -37,6 +37,7 @@ class LoginController extends BaseController
             }else{
                 $this->addFlashe('danger',"Erreur d'email ou de mot de passe .");
             }
+
             $this->redirect("/admin/product/list");
         }
 
