@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace MIS\Infrastructure\Repository;
 
-use Doctrine\ORM\EntityRepository;
 use MIS\Domain\Product\Entity\ProductEntity;
 use MIS\Domain\Product\Repository\ProductRepositoryInterface;
 use MIS\EntityOrm\ProductEntityORM;
-use MIS\EntityOrm\UserEntityORM;
+
 
 /**
  * Class ProductRepository

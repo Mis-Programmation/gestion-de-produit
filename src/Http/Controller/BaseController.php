@@ -38,13 +38,13 @@ abstract class BaseController
     protected function isAuth()
     {
 
-//        if(!SessionAuth::get('AUTH') &&  $_SERVER['REQUEST_URI'] !== "/login" ){
-//            $this->redirect('/login');
-//        }
-//
-//        if($_SERVER['REQUEST_URI'] === "/login" && SessionAuth::get('AUTH')){
-//            $this->redirect('/admin/product/list');
-//        }
+        if(!SessionAuth::get('AUTH') &&  $_SERVER['REQUEST_URI'] !== "/login" ){
+            $this->redirect('/login');
+        }
+
+        if($_SERVER['REQUEST_URI'] === "/login" && SessionAuth::get('AUTH')){
+            $this->redirect('/admin/product/list');
+        }
     }
 
     protected function redirect(string $path)

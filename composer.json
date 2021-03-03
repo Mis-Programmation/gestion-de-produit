@@ -1,7 +1,9 @@
 {
     "version": "0.01",
     "name": "mis/gestion-produit",
+
     "require": {
+        "php": " >= 7.4",
         "symfony/var-dumper": "^5.2",
         "slim/flash": "^0.4.0",
       "ext-pdo": "*",

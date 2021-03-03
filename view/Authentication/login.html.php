@@ -16,11 +16,11 @@
                 <form method="POST" >
                     <div class="form-group"  >
                         <label for="email">E-mail</label>
-                        <input type="email" class="form-control shadow-sm"  name="User[email]" id="email">
+                        <input type="email" required class="form-control shadow-sm"  name="User[email]" id="email">
                     </div>
                     <div class="form-group" >
                         <label for="password">Mot de passe</label>
-                        <input type="password" class="form-control shadow-sm"  name="User[password]" id="password" >
+                        <input type="password" required class="form-control shadow-sm"  name="User[password]" id="password" >
                     </div>
                     <button type="submit" class="btn btn-success col-md-12 rounded-pill" >Se connecter</button>
                 </form>

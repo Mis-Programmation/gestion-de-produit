@@ -1,10 +1,9 @@
 <?php
 
+declare(strict_types=1);
 
 namespace MIS\Infrastructure\Service;
 
-
-use Slim\Flash\Messages;
 
 class SessionAuth
 {
